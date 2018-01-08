@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Predator_and_Prey_Model</title>
+
+	<script src="libraries/p5.js"></script>
+	<script src="libraries/p5.dom.js"></script>
+	<script src="libraries/p5.sound.js"></script>
+	<script src="sketch.js"></script>
+	<script src="AgentModel.js"></script>
+	<script src="Agent.js"></script>
+
+	<style>
+	@font-face{
+		font-family: mono;
+		src: url(font/SourceCodePro-Regular.otf.woff);
+	}
+	@font-face{
+		font-family: monoIt;
+		src: url(font/SourceCodePro-It.otf.woff);
+	}
+	body {
+		margin:0;
+		padding:0;
+	}
+	canvas {
+		/*margin:auto;*/
+	}
+	a{
+		color: #f00;
+	}
+	a:hover{
+		font-style: italic;
+	}
+	input{	
+		left: 5px;	
+		background: #fff;
+		position: absolute;
+		width: 150px;
+		border: solid 3px #000;
+		height: 20px;
+		float: left;
+		z-index: 2;
+	}
+	h2{
+		background-color: #000;
+		color: #fff;
+	}
+	h3{
+		background-color: #000;
+		color: #fff;
+	}
+	li{
+		font-family: mono;
+		font-size: 12px;
+	}
+	code{
+		font-family: monoIt;
+		background: #bbb;
+	}
+	/*styling buttons*/
+	button{
+		position: absolute;
+		left: 5px;
+		background-color: #fff;
+		border: solid 3px #000;
+		font-family: Helvetica;
+		font-weight: bolder;
+		font-size: 20px;
+		padding-top: 3px;
+	}
+	button:hover{
+		border: solid 3px #0f0;
+	}
+	/*class description*/
+	.cnv{
+		position: absolute;
+		left: 0px;
+		z-index: 0;
+		border: solid 3px #000;
+		padding: 5px 5px 3px 5px;
+	}
+	.inputValue{
+		position: absolute;
+		left: 185px;
+		background: #fff;
+		color: #000;
+		font-family: Helvetica;
+		font-weight: bolder;
+		font-size: 15px;
+		border: solid 3px #000;
+		z-index: 2;
+		padding: 5px 5px 3px 5px;
+	}
+	.textElement{		
+		overflow-y: scroll;
+		display: none;
+		position: absolute;
+		background-color: rgba(255, 255, 255, 0.7);
+		color: #000;
+		font-family: Helvetica;
+		font-weight: bolder;
+		font-size: 15px;
+		border: solid 3px #000;
+		z-index: 2;
+		padding: 5px 5px 3px 5px;
+	}
+	.resizeElement{		
+		position: absolute;
+		background-color: rgba(255, 255, 255, 0.7);
+		color: #000;
+		font-family: Helvetica;
+		font-weight: bolder;
+		font-size: 15px;
+		border: solid 3px #000;
+		z-index: 2;
+		padding: 5px 5px 3px 5px;
+	}
+</style>
+</head>
+<body onload="initModel()" onresize="checkWindow()"><!--onload="updateValue()" -->
+	<div class="cnv" id="myCnv"></div>
+	<input type="range" style="top: 5px" id="threshold" value="2" min="2" max="100" step="1" onload="updateValue()" onchange="updateValue()">
+	<input type="range" style="top: 55px" id="maxHealth" value="300" min="5" max="300" step="1" onchange="updateValue()">
+	<input type="range" style="top: 105px" id="empty" value="90" min="10" max="90" step="1" onchange="updateValue()">
+	<input type="range" style="top: 155px" id="prey" value="62" min="10" max="100" step="1" onchange="updateValue()" onload="updateValue()">
+	<button type="button" id="playPause" style="top: 205px;" id="initModel" onclick="initModel()">PLAY</button>
+	<div class="inputValue" style="top: 5px" id="thehreshold">THRESHOLD: 2</div>
+	<div class="inputValue" style="top: 55px" id="themaxHealth">MAX HEALTH: 10</div>
+	<div class="inputValue" style="top: 105px" id="theempty">EMPTY: 30%</div>
+	<div class="inputValue" style="top: 155px" id="theprey">PREY: 30%</div>
+	<button type="button" style="top: 500px; font-size: 15px;" id="howButton" onclick="showDescription()">HOW IT WORKS</button>
+	<div class="textElement" id="description">
+		<h2>Predator and Prey Model</h2>
+		The model is based on the following simple rules:<br><br>
+		<span style="color: #0ff; background-color: #000;">Prey:</span> 
+		<ul>
+			<li>Tries to move in a random direction.</li>
+			<li>Health increases.</li>
+			<li>When health reaches a threshold:</li>
+			<li>They will reproduce, creating a new "Prey"</li>
+			<li>Their health resets to 1</li>
+		</ul>
+		<span style="color: #f0f; background-color: #000;">Predator:</span> 
+		<ul>
+			<li>Tries to move in a random direction.</li>
+			<li>Health decreases.</li>
+			<li>When health reaches 0, they die and turn into "Nothing".</li>
+			<li>If the adjacent square is a prey: They will eat it, turning it into a "predator" (reproducing) Their health will increase by the amount of health the eaten prey had</li>
+		</ul>
+		<h3>How it works</h3>
+		The AgentModel class creates a grid of agents, the agets can be: preys, predators or nothing.<br>
+		Each frame the model is updated. First by updating the health of the agents, than they are moved. The agents can move only in the adiacent free cells, it means either up, down, left and right, Diagonal movement are not allowed. <code>move(x, y)</code> tries to move the agent to a random direction <code>moveUp(x, y)</code> <code>moveRight(x, y)</code> <code>moveDown(x, y)</code> <code>moveLeft(x, y)</code>, if the agent finds himself at one of the edges than the <code>move(x, y)</code> function is called again until it can move to one of the directions.<br>
+		Once the agent is moved the <code>moveUp/Right/Down/Left(x, y)</code> function checks wheter the neighbour was a predator in that case the prey is eaten and the predator reproduces getting the health of the eaten prey.<br>
+		There are four values to change wth the slider
+		<ul>
+			<li>The threshold, that is the rate by which the prey reproduce</li>
+			<li>The maximum health of every single Agent</li>
+			<li>The initial number of empty or cells</li>
+			<li>The proportion between predators and preys</li>
+		</ul>
+		The play button restarts the model with the new values.<br>
+		With the <code>LEFT</code> mouse button is possible to add new predators, and with the <code>RIGHT</code> mouse button is possible to add new preys.<br>
+		The infographic on the left side shows how many preys and predator are still alive.
+		<h3>Reference</h3>
+		<a href="https://github.com/Hopson97/PredatorAndPrey">Predator & Prey Model</a> by <a href="https://github.com/Hopson97">Matthew Hopson</a>
+		<h3>FORK IT <a href="https://github.com/Yyyyaaaannnnoooo/Predator_and_Prey_Model">HERE</a></h3><br><br><br>
+	</div>
+	<div class="resizeElement" id="resizeMe" style="top:33%; left: 1000px; width: auto; height: auto;"><h1>< < < < < < < < < < < < < < </h1><br>RESIZE THE WINDOW TO THE LEFT TO START THE MODEL</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
