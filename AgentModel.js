@@ -133,7 +133,7 @@ function AgentModel(pixSize, t, percN, percPrey, MaxH) {
 	* different agents drawn to the screen
 	*/
 	this.infographic = function(){		
-		let top = 450, infoH = -200, left = 10, gutter = 7;
+		let top = 500, infoH = -200, left = 10, gutter = 7;
 		//first we draw a transparent background
 		strokeWeight(3);
 		stroke(0);
