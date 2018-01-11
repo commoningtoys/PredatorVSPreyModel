@@ -70,7 +70,7 @@
 		border: solid 3px #000;
 		font-family: Helvetica;
 		font-weight: bolder;
-		font-size: 20px;
+		font-size: 110%;
 		padding-top: 3px;
 	}
 	button:hover{
@@ -91,7 +91,7 @@
 		color: #000;
 		font-family: Helvetica;
 		font-weight: bolder;
-		font-size: 15px;
+		font-size: 90%;
 		border: solid 3px #000;
 		z-index: 2;
 		padding: 5px 5px 3px 5px;
@@ -104,7 +104,7 @@
 		color: #000;
 		font-family: Helvetica;
 		font-weight: bolder;
-		font-size: 15px;
+		font-size: 100%;
 		border: solid 3px #000;
 		z-index: 2;
 		padding: 5px 5px 3px 5px;
@@ -115,7 +115,7 @@
 		color: #000;
 		font-family: Helvetica;
 		font-weight: bolder;
-		font-size: 15px;
+		font-size: 100%;
 		border: solid 3px #000;
 		z-index: 2;
 		padding: 5px 5px 3px 5px;
@@ -127,13 +127,15 @@
 	<input type="range" style="top: 5px" id="threshold" value="2" min="2" max="100" step="1" onload="updateValue()" onchange="updateValue()">
 	<input type="range" style="top: 55px" id="maxHealth" value="300" min="5" max="300" step="1" onchange="updateValue()">
 	<input type="range" style="top: 105px" id="empty" value="90" min="10" max="90" step="1" onchange="updateValue()">
-	<input type="range" style="top: 155px" id="prey" value="62" min="10" max="100" step="1" onchange="updateValue()" onload="updateValue()">
-	<button type="button" id="playPause" style="top: 205px;" id="initModel" onclick="initModel()">PLAY</button>
+	<input type="range" style="top: 155px" id="prey" value="62" min="10" max="100" step="1" onchange="updateValue()">
+	<input type="range" style="top: 205px" id="speed" value="100" min="1" max="100" step="1" onchange="updateValue()" onload="updateValue()">
+	<button type="button" id="playPause" style="top: 255px;" id="initModel" onclick="initModel()">PLAY</button>
 	<div class="inputValue" style="top: 5px" id="thehreshold">THRESHOLD: 2</div>
 	<div class="inputValue" style="top: 55px" id="themaxHealth">MAX HEALTH: 10</div>
 	<div class="inputValue" style="top: 105px" id="theempty">EMPTY: 30%</div>
 	<div class="inputValue" style="top: 155px" id="theprey">PREY: 30%</div>
-	<button type="button" style="top: 500px; font-size: 15px;" id="howButton" onclick="showDescription()">HOW IT WORKS</button>
+	<div class="inputValue" style="top: 205px" id="thespeed">SPEED: 100%</div>
+	<button type="button" style="top: 550px; font-size: 90%;" id="howButton" onclick="showDescription()">HOW IT WORKS</button>
 	<div class="textElement" id="description">
 		<h2>Predator and Prey Model</h2>
 		The model is based on the following simple rules:<br><br>
