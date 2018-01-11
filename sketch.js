@@ -1,4 +1,4 @@
-let am = null, w, h, agentSize = 10, play = false, showMenu = false, resizeBox;
+let am = null, w, h, agentSize = 10, play = false, showMenu = false, resizeBox, speed = 1;
 
 function setup() {
 	w = h = floor(windowHeight / agentSize) * agentSize - (2 * agentSize);
@@ -14,7 +14,9 @@ function setup() {
 function draw() {
 	resizeBox.style.left = 13 + w + 'px';
 	if(play){
-		am.update();
+		if(frameCount % speed == 0){
+			am.update();
+		}
 		am.show();
 		am.infographic();
 	}
@@ -36,6 +38,10 @@ function updateValue(){
 	document.getElementById("themaxHealth").innerHTML = "MAX HEALTH: " + document.getElementById("maxHealth").value;
 	document.getElementById("theempty").innerHTML = "EMPTY: " + document.getElementById("empty").value + "%";
 	document.getElementById("theprey").innerHTML = "PREY: " + document.getElementById("prey").value + " %";
+	let docSpeed = parseFloat(document.getElementById("speed").value);
+	document.getElementById("thespeed").innerHTML = "SPEED: " + docSpeed + " %";
+	speed = floor(map(docSpeed, 1, 100, 10, 1));
+
 }
 
 function showDescription(){
