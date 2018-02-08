@@ -13,38 +13,56 @@ function setup() {
 
 function draw() {
 	resizeBox.style.left = 13 + w + 'px';
-	if(play){
-		if(frameCount % speed == 0){
-			am.update();
+	if (play) {
+		// if(frameCount % speed == 0){
+		// 	am.update();
+		// }
+		// for(let i = 0; i < 50; i++){
+		// 	am.update();
+		// }
+		if (speed >= 50) {
+			let loop = abs(50 - speed);
+			if(loop == 0)loop = 1;
+			for (let i = 0; i < loop; i++) {
+				am.update();
+			}
+		} else {
+
+			let timer = floor(map(speed, 0, 49, 10, 1));
+			console.log(timer);
+			if (frameCount % timer == 0) {
+				am.update();
+			}
 		}
 		am.show();
 		am.infographic();
 	}
 }
 
-function mousePressed(){
-	if(play)am.addAgent(mouseX, mouseY, mouseButton);
+function mousePressed() {
+	if (play) am.addAgent(mouseX, mouseY, mouseButton);
 }
 
-function initModel(){
-		let input1 = document.getElementById("threshold").value;
-		let input2 = document.getElementById("maxHealth").value;
-		let input3 = document.getElementById("empty").value;
-		let input4 = document.getElementById("prey").value;
-		am = new AgentModel(agentSize, input1, input3, input4, input2);
+function initModel() {
+	let input1 = document.getElementById("threshold").value;
+	let input2 = document.getElementById("maxHealth").value;
+	let input3 = document.getElementById("empty").value;
+	let input4 = document.getElementById("prey").value;
+	am = new AgentModel(agentSize, input1, input3, input4, input2);
 }
-function updateValue(){
+function updateValue() {
 	document.getElementById("thehreshold").innerHTML = "THRESHOLD: " + document.getElementById("threshold").value;
 	document.getElementById("themaxHealth").innerHTML = "MAX HEALTH: " + document.getElementById("maxHealth").value;
 	document.getElementById("theempty").innerHTML = "EMPTY: " + document.getElementById("empty").value + "%";
 	document.getElementById("theprey").innerHTML = "PREY: " + document.getElementById("prey").value + " %";
 	let docSpeed = parseFloat(document.getElementById("speed").value);
 	document.getElementById("thespeed").innerHTML = "SPEED: " + docSpeed + " %";
-	speed = floor(map(docSpeed, 1, 100, 10, 1));
+	// speed = floor(map(docSpeed, 1, 100, 10, 1));
+	speed = docSpeed;
 
 }
 
-function showDescription(){
+function showDescription() {
 	showMenu = !showMenu;
 	document.getElementById("howButton").innerHTML = showMenu == true ? "HIDE DESCRIPTION" : "HOW IT WORKS";
 	let myDesc = document.getElementById("description");
@@ -54,17 +72,17 @@ function showDescription(){
 	myDesc.style.width = (w - left - gutter) + "px";
 	myDesc.style.height = (w - 2 * gutter) + "px";
 	let txt = document.getElementsByClassName("textElement");
-	for(let i = 0; i < txt.length; i++){
+	for (let i = 0; i < txt.length; i++) {
 		txt[i].style.display = showMenu == true ? "block" : "none";
 	}
 }
 
-function checkWindow(){
+function checkWindow() {
 	let thisW = window.innerWidth;
 	let gutter = 30;
-	if(thisW > w - gutter && thisW < w + gutter) {
+	if (thisW > w - gutter && thisW < w + gutter) {
 		play = true;
-	}else play = false;
+	} else play = false;
 }
 
 
