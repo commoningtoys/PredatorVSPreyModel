@@ -27,3 +27,5 @@ With the <code>LEFT</code> mouse button is possible to add new predators, and wi
 The infographic on the left side shows how many preys and predator are still alive.
 <h2>Reference</h2>
 <a href="https://github.com/Hopson97/PredatorAndPrey">Predator & Prey Model</a> by <a href="https://github.com/Hopson97">Matthew Hopson</a>
+# addons
+ 1. add grass
